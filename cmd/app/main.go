@@ -4,8 +4,11 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
+
+	"github.com/peixotoleonardo/shell/internal/register"
+
+	_ "github.com/peixotoleonardo/shell/internal/command"
 )
 
 func parse(raw string) (string, []string) {
@@ -21,38 +24,11 @@ func main() {
 		raw, err := bufio.NewReader(os.Stdin).ReadString('\n')
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "there was an error: %v\n", err)
-
-			os.Exit(1)
+			panic(fmt.Sprintf("there was an error during input reading: %v\n", err))
 		}
 
 		cmd, args := parse(raw)
 
-		switch cmd {
-		case "exit":
-			handleExitCommand(args)
-		case "echo":
-			handleEchoCommand(args)
-		default:
-			fmt.Fprintf(os.Stdout, "%s: command not found\n", cmd)
-		}
+		register.Execute(cmd, args)
 	}
-}
-
-func handleExitCommand(args []string) {
-	if len(args) > 0 {
-		code, err := strconv.Atoi(args[0])
-
-		if err != nil {
-			os.Exit(0)
-		}
-
-		os.Exit(code)
-	}
-
-	os.Exit(0)
-}
-
-func handleEchoCommand(args []string) {
-	fmt.Fprintf(os.Stdout, "%s\n", strings.Join(args, " "))
 }
