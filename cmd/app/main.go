@@ -31,9 +31,11 @@ func main() {
 		switch cmd {
 		case "exit":
 			handleExitCommand(args)
+		case "echo":
+			handleEchoCommand(args)
+		default:
+			fmt.Fprintf(os.Stdout, "%s: command not found\n", cmd)
 		}
-
-		fmt.Fprintf(os.Stdout, "%s: command not found\n", cmd)
 	}
 }
 
@@ -49,4 +51,8 @@ func handleExitCommand(args []string) {
 	}
 
 	os.Exit(0)
+}
+
+func handleEchoCommand(args []string) {
+	fmt.Fprintf(os.Stdout, "%s\n", strings.Join(args, " "))
 }
