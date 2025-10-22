@@ -13,8 +13,9 @@ func RegisterCommand(cmd string, fn CommandHandle) {
 	commandRegistry[cmd] = fn
 }
 
-func IsCommandRegistered(cmd string) bool {
+func IsBuiltinCommand(cmd string) bool {
 	_, ok := commandRegistry[cmd]
+	
 	return ok
 }
 
