@@ -9,9 +9,11 @@ import (
 )
 
 func init() {
-	register.RegisterCommand("echo", HandleEcho)
+	register.RegisterCommandHandle("echo", HandleEcho)
 }
 
-func HandleEcho(args []string) {
+func HandleEcho(args []string) error {
 	fmt.Fprintf(os.Stdout, "%s\n", strings.Join(args, " "))
+
+	return nil
 }

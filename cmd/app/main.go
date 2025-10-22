@@ -6,16 +6,9 @@ import (
 	"os"
 	"strings"
 
+	_ "github.com/peixotoleonardo/shell/internal/builtin"
 	"github.com/peixotoleonardo/shell/internal/register"
-
-	_ "github.com/peixotoleonardo/shell/internal/command"
 )
-
-func parse(raw string) (string, []string) {
-	parts := strings.Split(strings.TrimSpace(raw), " ")
-
-	return parts[0], parts[1:]
-}
 
 func main() {
 	for {
@@ -27,8 +20,22 @@ func main() {
 			panic(fmt.Sprintf("there was an error during input reading: %v\n", err))
 		}
 
-		cmd, args := parse(raw)
+		parts := strings.Split(strings.TrimSpace(raw), " ")
 
-		register.Execute(cmd, args)
+		args := []string{}
+
+		if len(parts) > 1 {
+			args = parts[1:]
+		}
+
+		cmd, err := register.NewCommand(parts[0], args)
+
+		if err != nil {
+			fmt.Fprintf(os.Stdout, "%s: command not found\n", parts[0])
+
+			continue
+		}
+
+		cmd.Execute()
 	}
 }

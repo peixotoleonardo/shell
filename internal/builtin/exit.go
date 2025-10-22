@@ -8,10 +8,10 @@ import (
 )
 
 func init() {
-	register.RegisterCommand("exit", HandleExit)
+	register.RegisterCommandHandle("exit", HandleExit)
 }
 
-func HandleExit(args []string) {
+func HandleExit(args []string) error {
 	if len(args) > 0 {
 		code, err := strconv.Atoi(args[0])
 
@@ -23,4 +23,6 @@ func HandleExit(args []string) {
 	}
 
 	os.Exit(0)
+
+	return nil
 }
